@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Shore from './Shore';
 import River from './River';
 import Boat from './Boat';
