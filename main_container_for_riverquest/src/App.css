@@ -4,6 +4,14 @@
   --text-color: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
   --border-color: rgba(255, 255, 255, 0.1);
+  
+  /* Game-specific colors */
+  --river-color: #2d91c2;
+  --left-shore-color: #7c5e42;
+  --right-shore-color: #7c5e42;
+  --boat-color: #8B4513;
+  --character-bg: #444;
+  --character-selected: #E87A41;
 }
 
 body {
@@ -48,61 +56,278 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 24px;
   width: 100%;
   box-sizing: border-box;
 }
 
-.hero {
-  padding-top: 120px;
-  padding-bottom: 64px;
-  text-align: center;
+.game-main {
+  padding-top: 80px;
+  padding-bottom: 40px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 24px;
 }
 
-.subtitle {
+/* Game container styles */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.game-header h1 {
   color: var(--kavia-orange);
-  font-weight: 500;
-  font-size: 1.1rem;
+  margin-bottom: 10px;
 }
 
-.title {
-  font-size: 3.5rem;
-  font-weight: 600;
-  line-height: 1.2;
-  margin: 0;
+.game-status {
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }
 
-.description {
-  font-size: 1.1rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin-bottom: 16px;
-}
-
-.btn {
+.reset-button {
   background-color: var(--kavia-orange);
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 10px 20px;
+  padding: 8px 16px;
   font-size: 1rem;
-  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.btn:hover {
-  background-color: #FF8B4D;
+.game-board {
+  display: flex;
+  min-height: 400px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.btn-large {
-  padding: 12px 24px;
-  font-size: 1.1rem;
+/* Shore styles */
+.shore {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--left-shore-color);
+  position: relative;
+}
+
+.shore.leftShore {
+  align-items: flex-end;
+}
+
+.shore.rightShore {
+  align-items: flex-start;
+}
+
+.shore-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  width: 100%;
+}
+
+.shore-ground {
+  height: 40px;
+  width: 100%;
+  background-color: var(--left-shore-color);
+  border-top: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+/* River styles */
+.river-section {
+  width: 150px;
+  position: relative;
+}
+
+.river {
+  width: 100%;
+  height: 100%;
+  background-color: var(--river-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.water-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(45, 145, 194, 0.5) 0%,
+    rgba(45, 145, 194, 0.8) 50%,
+    rgba(45, 145, 194, 0.5) 100%
+  );
+  background-size: 200% 100%;
+  animation: waterFlow 10s linear infinite;
+}
+
+@keyframes waterFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Boat styles */
+.boat {
+  position: absolute;
+  width: 120px;
+  height: 80px;
+  background-color: var(--boat-color);
+  border-radius: 10px 10px 0 0;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s ease-in-out;
+}
+
+.boat.leftShore {
+  left: 15px;
+}
+
+.boat.rightShore {
+  left: calc(100% - 15px);
+  transform: translateX(-100%);
+}
+
+.boat-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  padding: 10px;
+}
+
+.boat-empty-spot {
+  width: 40px;
+  height: 40px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+}
+
+.boat-control {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--kavia-orange);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Character styles */
+.character {
+  background-color: var(--character-bg);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 70px;
+}
+
+.character:hover {
+  transform: scale(1.05);
+}
+
+.character.selected {
+  background-color: var(--character-selected);
+}
+
+.character.boat {
+  transform: scale(0.8);
+  margin: 0 -5px;
+}
+
+.character-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.character-name {
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Game instructions */
+.game-instructions {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.game-instructions h2 {
+  color: var(--kavia-orange);
+  margin-top: 0;
+}
+
+.game-instructions ul {
+  padding-left: 20px;
+}
+
+.game-instructions li {
+  margin-bottom: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .game-board {
+    flex-direction: column;
+    min-height: 600px;
+  }
+  
+  .river-section {
+    width: 100%;
+    height: 100px;
+  }
+  
+  .shore {
+    height: 200px;
+  }
+  
+  .shore-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .boat {
+    width: 160px;
+  }
+  
+  .boat.leftShore {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 60px;
+  }
+  
+  .boat.rightShore {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 60px;
+  }
 }
